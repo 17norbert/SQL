@@ -26,7 +26,7 @@ GROUP BY age) AS subq
 GROUP BY age,subq.total_age
 ORDER BY Percentage DESC) AS subq2;
 ---------------------------------------------------
---------which team won the most medals in each olympics
+--------Which team won the most medals in each olympics
 
 SELECT DISTINCT ON(games) games,noc,gold,silver,bronze, SUM(gold+silver+bronze) FROM
 (SELECT games,noc,
@@ -39,6 +39,7 @@ GROUP BY games,noc
 ORDER BY games,gold DESC) AS sub
 GROUP BY games,noc,gold,silver,bronze
 ORDER BY games DESC,gold DESC ,silver DESC ,bronze DESC;
+LIMIT 10
 
 ---------------------
 
