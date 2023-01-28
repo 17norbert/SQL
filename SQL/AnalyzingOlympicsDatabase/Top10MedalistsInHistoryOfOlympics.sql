@@ -52,4 +52,4 @@ JOIN sub3 ON sub2.name = sub3.name
 ORDER BY sub1.gold DESC,sub2.silver DESC,sub3.bronze DESC
 LIMIT 10
 
-
+[RESULTS](https://github.com/17norbert/SQL-Olympics/blob/5e22f9964a0cf15ccd429736eee45281ab1c154a/SQL/AnalyzingOlympicsDatabase/data-1674922177204.csv)
