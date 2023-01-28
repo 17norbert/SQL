@@ -71,18 +71,6 @@ ORDER BY GOLD DESC,
 	BRONZE DESC
 LIMIT 10
 
---RESULTS
-country	gold	silver	bronze
-USA	2638	1641	1358
-Russia	1082	732	689
-Germany	745	674	746
-UK	678	739	651
-Italy	575	531	531
-France	501	610	666
-Sweden	479	522	535
-Canada	463	438	451
-Hungary	432	332	371
-Germany	397	327	281
 
 ----
 ----TOP 10 medalists in history of Olympics
