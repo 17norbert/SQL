@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS olympics_history_noc_regions
 
 ---IMPORT DATA
 ---
----TOP 10 Countries with most medals in history
+--- 1.TOP 10 Countries with most medals in history
 
 WITH SUB1 AS
 	(SELECT NOC,
@@ -72,8 +72,8 @@ ORDER BY GOLD DESC,
 LIMIT 10
 
 
-----
-----TOP 10 medalists in history of Olympics
+---
+--- 2.TOP 10 medalists in history of Olympics
 
 WITH sub1 AS
 (SELECT name,COUNT(medal) as gold  FROM olympics_history
@@ -97,14 +97,14 @@ ORDER BY sub1.gold DESC,sub2.silver DESC,sub3.bronze DESC
 LIMIT 10;
 
 ---
----Top 10 sports with most representants in history
+--- 3.Top 10 sports with most representants in history
 SELECT sport,COUNT(DISTINCT(name)) AS total_number_of_players 
 FROM olympics_history
 GROUP BY sport
 ORDER BY total_number_of_players DESC
 LIMIT 10;
 ---
----Country with most medalists for each sport in history
+--- 4.Country with most medalists for each sport in history
 WITH sub1 AS
 (
 SELECT sport,region,COUNT(*) AS total FROM olympics_history
@@ -115,7 +115,7 @@ ORDER BY sport,total DESC
 )
 SELECT DISTINCT ON(sport) sport,region,total FROM sub1
 ---
----Which team won the most medals in each olympics
+--- 5.Which team won the most medals in each olympics
 
 SELECT DISTINCT ON(games) games,olympics_history_noc_regions.region,
 gold,silver,bronze, 
@@ -134,7 +134,7 @@ GROUP BY games,region,gold,silver,bronze
 ORDER BY games DESC,gold DESC ,silver DESC ,bronze DESC;
 
 ---
----Distribution of age in the history of olympics
+--- 6.Distribution of age in the history of olympics
 SELECT age,total,CONCAT(ROUND(percentage,4),'%') FROM 
 (SELECT age,subq.total,SUM(subq.total)*100.0/SUM(SUM(subq.total)) OVER() AS Percentage FROM 
 (SELECT age,COUNT(age) AS total FROM olympics_history
@@ -142,4 +142,4 @@ GROUP BY age) AS subq
 GROUP BY age,subq.total
 ORDER BY Percentage DESC) AS subq2;
 ---
-
+---
