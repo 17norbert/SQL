@@ -94,8 +94,52 @@ SELECT sub1.name,sub1.gold,sub2.silver,sub3.bronze FROM sub1
 JOIN sub2 ON sub2.name = sub1.name
 JOIN sub3 ON sub2.name = sub3.name
 ORDER BY sub1.gold DESC,sub2.silver DESC,sub3.bronze DESC
-LIMIT 10
+LIMIT 10;
 
+---
+---Top 10 sports with most representants in history
+SELECT sport,COUNT(DISTINCT(name)) AS total_number_of_players 
+FROM olympics_history
+GROUP BY sport
+ORDER BY total_number_of_players DESC
+LIMIT 10;
+---
+---Country with most medalists for each sport in history
+WITH sub1 AS
+(
+SELECT sport,region,COUNT(*) AS total FROM olympics_history
+JOIN olympics_history_noc_regions AS ohn ON ohn.noc = olympics_history.noc
+WHERE medal NOT LIKE 'NA' 
+GROUP BY sport,region
+ORDER BY sport,total DESC
+)
+SELECT DISTINCT ON(sport) sport,region,total FROM sub1
+---
+---Which team won the most medals in each olympics
 
+SELECT DISTINCT ON(games) games,olympics_history_noc_regions.region,
+gold,silver,bronze, 
+SUM(gold+silver+bronze) as total
+FROM
+(SELECT games,olympics_history.noc,
+COUNT(CASE WHEN medal = 'Gold' THEN 1 END) AS gold,
+COUNT(CASE WHEN medal = 'Silver' THEN 1 END) AS silver,
+COUNT(CASE WHEN medal = 'Bronze' THEN 1 END) AS bronze
+FROM olympics_history
+WHERE medal NOT LIKE 'NA'
+GROUP BY games,olympics_history.noc
+ORDER BY games,gold DESC) AS sub
+JOIN olympics_history_noc_regions ON sub.noc = olympics_history_noc_regions.noc
+GROUP BY games,region,gold,silver,bronze
+ORDER BY games DESC,gold DESC ,silver DESC ,bronze DESC;
 
+---
+---Distribution of age in the history of olympics
+SELECT age,total,CONCAT(ROUND(percentage,4),'%') FROM 
+(SELECT age,subq.total,SUM(subq.total)*100.0/SUM(SUM(subq.total)) OVER() AS Percentage FROM 
+(SELECT age,COUNT(age) AS total FROM olympics_history
+GROUP BY age) AS subq
+GROUP BY age,subq.total
+ORDER BY Percentage DESC) AS subq2;
+---
 
